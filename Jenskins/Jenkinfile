@@ -10,7 +10,7 @@ pipeline {
     stage('Test') {
         steps {
             sh 'python3 --version'
-            sh 'pip3 install -r app/requirements.txt'
+            sh 'pip install -r app/requirements.txt'
             sh 'python3 -m pytest -v'
 
         }
