@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    environment {
+        DOCKER_IMAGE ='sathiyanarayananr/aws-devops-app:v1'
+    }
+
     stages {
         stage('checkout') {
             steps {
@@ -26,11 +30,10 @@ pipeline {
                 withCredentials([
                     usernamePassword(
                         credentialsId : 'dockerhub-credentials',
-                        usernameVaraiable : 'DOCKER_USERNAME',
-                        passwordVaraiable : 'DOCKER_PASSWORD'
+                        usernamevariable : 'DOCKER_USERNAME',
+                        passwordVariable : 'DOCKER_PASSWORD'
                     )
-                ])
-                sh '''
+                ]){ sh '''
                 echo "$DOCKER_PASSWORD" | docker login \
                 -u "$DOCKER_USERNAME" \
                 --password-stdin
