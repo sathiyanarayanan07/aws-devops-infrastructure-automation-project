@@ -21,7 +21,7 @@ pipeline {
     
         stage('Docker Build'){
             steps {
-                sh ' docker build -f docker/Dockerfile -t aws-devops-app:v1 .'
+                sh ' docker build -f docker/Dockerfile -t "$DOCKER_IMAGE" .'
             }
         }
 
