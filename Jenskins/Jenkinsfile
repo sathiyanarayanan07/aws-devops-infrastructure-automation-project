@@ -1,0 +1,23 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('checkout'){
+            steps {
+                checkout scm
+            }
+    }
+    stage('Test') {
+        steps {
+            sh 'python3 --version'
+            sh 'echo "Running application tests"'
+        }
+    }
+    
+    stage('Docker Build'){
+        steps {
+            sh 'sudo docker build -f docker/Dockerfile -t was-devops-app:v1 .'
+        }
+    }
+    }
+}
