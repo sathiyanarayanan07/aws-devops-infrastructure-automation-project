@@ -1,0 +1,45 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('checkout') {
+            steps {
+                checkout scm
+            }
+        }
+        stage('Test') {
+            steps {
+                sh 'python3 --version'
+                sh '.venv/bin/pip install -r app/requirements.txt'
+                sh '.venv/bin/python -m pytest -v'
+            }
+        }
+    
+        stage('Docker Build'){
+            steps {
+                sh ' docker build -f docker/Dockerfile -t aws-devops-app:v1 .'
+            }
+        }
+
+        stage('Docker push') {
+            steps {
+                withCredentials([
+                    usernamepassword(
+                        CredentialsId : 'dockerhub-credentials',
+                        usernameVaraiable : 'DOCKER_USERNAME',
+                        passwordVaraiable : 'DOCKER_PASSWORD'
+                    )
+                ])
+                sh '''
+                echo "$DOCKER_PASSWORD" | docker login \
+                -u "$DOCKER_USERNAME" \
+                --password-stdin
+                docker push $DOCKER_IMAGE
+
+                docker logout
+                '''
+            }
+            
+        }
+    }
+}
