@@ -102,3 +102,10 @@ resource "aws_key_pair" "devops" {
         Name = "devops-ec2-key"
     }
 }
+
+resource "local_file" "ansible_inventory" {
+  filename = "${path.module}/../Ansible/inventory"
+  content = templatefile("${path.module}/inventory.tftpl", {
+    public_ip = aws_instance.app.public_ip
+  })
+}

@@ -1,0 +1,43 @@
+---
+- name: Deploy Docker application to EC2
+  hosts: app
+  become: true
+
+  tasks:
+
+    - name: Install Docker
+      apt:
+        name: docker.io
+        state: present
+        update_cache: true
+
+    - name: Start Docker service
+      service:
+        name: docker
+        state: started
+        enabled: true
+
+    - name: Add ubuntu user to docker group
+      user:
+        name: ubuntu
+        groups: docker
+        append: true
+
+    - name: Pull application image
+      community.docker.docker_image:
+        name: sathiyanarayananr/aws-devops-app:v1
+        source: pull
+
+    - name: Remove existing application container
+      community.docker.docker_container:
+        name: aws-devops-app
+        state: absent
+
+    - name: Run application container
+      community.docker.docker_container:
+        name: aws-devops-app
+        image: sathiyanarayananr/aws-devops-app:v1
+        state: started
+        restart_policy: unless-stopped
+        ports:
+          - "5000:5000"

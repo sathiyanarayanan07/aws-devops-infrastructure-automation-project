@@ -42,6 +42,15 @@ pipeline {
                 docker logout
                 '''
             }
+
+        stage('Deploy') {
+            steps {
+                 sh ''' ansible-playbook \
+                 -i Ansible/inventory \
+                 Ansible/deploy.yml
+                 '''
+            }
+        }
             
         }
     }

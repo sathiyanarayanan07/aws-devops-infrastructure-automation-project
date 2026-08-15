@@ -1,0 +1,2 @@
+[app]
+aws_server ansible_host=13.201.31.153 ansible_user=ubuntu ansible_ssh_private_key_file=/home/sathiya/.ssh/devops-ec2
