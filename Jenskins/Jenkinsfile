@@ -43,16 +43,20 @@ pipeline {
                 '''
             }
 
-        stage('Deploy') {
-            steps {
-                 sh ''' ansible-playbook \
-                 -i Ansible/inventory \
-                 Ansible/deploy.yml
-                 '''
-            }
-        }
             
+        }  
+    }
+
+    stage('Deploy') {
+            steps {
+                sh '''
+                    ansible-playbook \
+                        -i Ansible/inventory \
+                        Ansible/deploy.yml
+                '''
         }
     }
+
+
 }
 }
